@@ -77,7 +77,7 @@ class Webpacker::Configuration
     end
 
     def load
-      YAML.load(config_path.read)[env].deep_symbolize_keys
+      YAML.safe_load(config_path.read, aliases: true)[env].deep_symbolize_keys
 
     rescue Errno::ENOENT => e
       raise "Webpacker configuration file not found #{config_path}. " \
@@ -92,6 +92,6 @@ class Webpacker::Configuration
 
     def defaults
       @defaults ||= \
-        HashWithIndifferentAccess.new(YAML.load_file(File.expand_path("../../install/config/webpacker.yml", __FILE__))[env])
+        HashWithIndifferentAccess.new(YAML.load_file(File.expand_path("../../install/config/webpacker.yml", __FILE__), aliases: true)[env])
     end
 end
